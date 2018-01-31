@@ -122,7 +122,7 @@ function get_os_version() {
         Ubuntu)
             if compareVersions "$__os_release" lt 14.04; then
                 error="You need Ubuntu 14.04 or newer"
-            elif compareVersions "$__os_release" lt 16.10; then
+            elif compareVersions "$__os_release" lt 16.04; then
                 __os_debian_ver="8"
             else
                 __os_debian_ver="9"
