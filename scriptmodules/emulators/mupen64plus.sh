@@ -31,7 +31,7 @@ function sources_mupen64plus() {
         'mupen64plus input-sdl'
         'mupen64plus rsp-hle'
     )
-    if isPlatform "mali"; then
+    if isPlatform "kms"; then
         repos+=(
             
             'mupen64plus video-rice '
@@ -69,7 +69,7 @@ function build_mupen64plus() {
         if [[ -f "$dir/projects/unix/Makefile" ]]; then
             make -C "$dir/projects/unix" clean
             params=()
-             isPlatform "mali" && params+=("VFP=1" "VFP_HARD=1" "HOST_CPU=armv7" "USE_GLES=1" )
+             isPlatform "kms" && params+=("VFP=1" "VFP_HARD=1" "HOST_CPU=armv7" "USE_GLES=1" )
              isPlatform "neon" && params+=("NEON=1")
             isPlatform "x11" && params+=("OSD=1" "PIE=1")
             isPlatform "x86" && params+=("SSE=SSE2")
@@ -84,7 +84,7 @@ function build_mupen64plus() {
     pushd "$md_build/GLideN64/projects/cmake"
     params=("-DMUPENPLUSAPI=On" "-DVEC4_OPT=On")
     isPlatform "neon" && params+=("-DNEON_OPT=On")
-    isPlatform "mali" && params+=("-DUSE_SYSTEM_LIBS=On" "-DODROID=ON" "-DGLES2=ON" "-DEGL=ON")
+    isPlatform "kms" && params+=("-DUSE_SYSTEM_LIBS=On" "-DODROID=ON" "-DGLES2=ON" "-DEGL=ON")
     if isPlatform "rpi3"; then 
         params+=("-DCRC_ARMV8=On")
     else
@@ -103,7 +103,7 @@ function build_mupen64plus() {
         'mupen64plus-rsp-hle/projects/unix/mupen64plus-rsp-hle.so'
         'GLideN64/projects/cmake/plugin/release/mupen64plus-video-GLideN64.so'
     )
-    if isPlatform "mali"; then
+    if isPlatform "kms"; then
         md_ret_require+=(
             'mupen64plus-video-rice/projects/unix/mupen64plus-video-rice.so'
             'mupen64plus-video-glide64mk2/projects/unix/mupen64plus-video-glide64mk2.so'
@@ -141,7 +141,7 @@ function install_mupen64plus() {
 }
 
 function configure_mupen64plus() {
-    if isPlatform "mali"; then
+    if isPlatform "kms"; then
         local res
         for res in "320x240" "640x480"; do
             local name=""
@@ -192,7 +192,7 @@ function configure_mupen64plus() {
     fi
 
     # Mali GLideN64 settings
-    if isPlatform "mali"; then
+    if isPlatform "kms"; then
         iniConfig " = " "" "$config"
         # Create GlideN64 section in .cfg
         if ! grep -q "\[Video-GLideN64\]" "$config"; then
