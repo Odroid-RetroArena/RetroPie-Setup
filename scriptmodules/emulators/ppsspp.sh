@@ -17,14 +17,14 @@ rp_module_section="opt"
 rp_module_flags=""
 
 function depends_ppsspp() {
-    local depends=(cmake libsdl2-dev libzip-dev)
+    local depends=(cmake libsdl2-dev libzip-dev libsnappy-dev)
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
     getDepends "${depends[@]}"
 }
 
 function sources_ppsspp() {
 
-   gitPullOrClone "$md_build/ppsspp" https://github.com/hrydgard/ppsspp.git v1.5.4
+   gitPullOrClone "$md_build/ppsspp" https://github.com/sikotik/ppsspp.git v1.5.4
 
     cd ppsspp
 
@@ -38,7 +38,7 @@ function sources_ppsspp() {
     # set ARCH_FLAGS to our own CXXFLAGS (which includes GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 if needed)
     sed -i "s/^set(ARCH_FLAGS.*/set(ARCH_FLAGS \"$CXXFLAGS\")/" cmake/Toolchains/raspberry.armv7.cmake
 
-    if hasPackage cmake 3.6 lt; then
+    if hasPackage cmake 3.5 lt; then
         cd ..
         mkdir -p cmake
         downloadAndExtract "$__archive_url/cmake-3.6.2.tar.gz" "$md_build/cmake" 1
@@ -105,7 +105,7 @@ function build_cmake_ppsspp() {
 
 function build_ppsspp() {
     local cmake="cmake"
-    if hasPackage cmake 3.6 lt; then
+    if hasPackage cmake 3.5 lt; then
         build_cmake_ppsspp
         cmake="$md_build/cmake/bin/cmake"
     fi
@@ -123,8 +123,8 @@ function build_ppsspp() {
         else
             params+=(-DCMAKE_TOOLCHAIN_FILE=cmake/Toolchains/raspberry.armv7.cmake)
         fi
-    elif isPlatform "mali"; then
-        params+=(-DUSING_GLES2=ON -DUSING_FBDEV=ON)
+    elif isPlatform "kms"; then
+        params+=(-DUSING_GLES2=ON -DUSING_FBDEV=ON -DUSING_EGL=OFF)
     fi
     "$cmake" "${params[@]}" .
     make clean
