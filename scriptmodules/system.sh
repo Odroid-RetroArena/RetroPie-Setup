@@ -166,7 +166,7 @@ function get_retropie_depends() {
         echo "deb http://archive.raspberrypi.org/debian/ $__os_codename main ui" >>$config
     fi
 
-    local depends=(git dialog wget gcc g++ build-essential unzip xmlstarlet python-pyudev)
+    local depends=(git dialog wget gcc g++ build-essential unzip xmlstarlet python-pyudev dhcpcd5 lshw)
 
     if ! getDepends "${depends[@]}"; then
         fatalError "Unable to install packages required by $0 - ${md_ret_errors[@]}"
