@@ -20,7 +20,7 @@ function setup_env() {
     __memory_phys=$(free -m | awk '/^Mem:/{print $2}')
     __memory_total=$(free -m -t | awk '/^Total:/{print $2}')
 
-    __has_binaries=1
+    __has_binaries=0
 
     get_platform
     get_os_version
@@ -76,10 +76,6 @@ function get_os_version() {
     local error=""
     case "$__os_id" in
         Raspbian|Debian)
-            if compareVersions "$__os_release" ge 9 && isPlatform "rpi"; then
-                error="Sorry - Raspbian/Debian Stretch (and newer) is not yet supported on the RPI"
-            fi
-
             if compareVersions "$__os_release" lt 8; then
                 error="You need Raspbian/Debian Jessie or newer"
             fi
@@ -96,7 +92,8 @@ function get_os_version() {
 
             # We currently only provide binaries for the Odroid XU4
             if isPlatform "odroid-xu" && compareVersions "$__os_release" lt 9; then
-                __has_binaries=1
+
+                __has_binaries=0
             fi
 
             # get major version (8 instead of 8.0 etc)
@@ -111,24 +108,32 @@ function get_os_version() {
             esac
             ;;
         LinuxMint)
-            if compareVersions "$__os_release" lt 17; then
-                error="You need Linux Mint 17 or newer"
-            elif compareVersions "$__os_release" lt 18; then
-                __os_ubuntu_ver="14.04"
-            else
-                __os_ubuntu_ver="16.04"
+            if [[ "$__os_desc" != LMDE* ]]; then
+                if compareVersions "$__os_release" lt 17; then
+                    error="You need Linux Mint 17 or newer"
+                elif compareVersions "$__os_release" lt 18; then
+                    __os_ubuntu_ver="14.04"
+                else
+                    __os_ubuntu_ver="16.04"
+                fi
             fi
             __os_debian_ver="8"
             ;;
         Ubuntu)
             if compareVersions "$__os_release" lt 14.04; then
                 error="You need Ubuntu 14.04 or newer"
-            elif compareVersions "$__os_release" lt 16.10; then
+            elif compareVersions "$__os_release" lt 16.04; then
                 __os_debian_ver="8"
             else
                 __os_debian_ver="9"
             fi
             __os_ubuntu_ver="$__os_release"
+            ;;
+        Deepin)
+            if compareVersions "$__os_release" lt 15.5; then
+                error="You need Deepin OS 15.5 or newer"
+            fi
+            __os_debian_ver="9"
             ;;
         elementary)
             if compareVersions "$__os_release" lt 0.3; then
@@ -252,7 +257,7 @@ function get_platform() {
 
 function platform_rpi1() {
     # values to be used for configure/make
-    __default_cflags="-O2 -mfpu=vfp -march=armv6j -mfloat-abi=hard"
+    __default_cflags="-O2 -mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard"
     __default_asflags=""
     __default_makeflags=""
     __platform_flags="arm armv6 rpi gles"
@@ -305,8 +310,8 @@ function platform_odroid-xu() {
     __default_cflags+=" -DGL_GLEXT_PROTOTYPES"
     __default_asflags=""
     __default_makeflags="-j2"
-    __platform_flags="arm armv7 neon mali gles"
-	__has_binaries=1
+    __platform_flags="arm armv7 neon kms gles"
+	__has_binaries=0
 }
 
 function platform_tinker() {

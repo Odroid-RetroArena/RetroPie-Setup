@@ -1281,3 +1281,23 @@ function delEmulator() {
         done
     fi
 }
+
+## @fn patchVendorGraphics()
+## @param filename file to patch
+## @details replace declared dependencies of old vendor graphics libraries with new names
+## Temporary compatibility workaround for legacy software to work on new Raspberry Pi firmwares.
+function patchVendorGraphics() {
+    local filename="$1"
+
+    # patchelf is not available on Raspbian Jessie
+    compareVersions "$__os_debian_ver" lt 9 && return
+
+    getDepends patchelf
+    printMsgs "console" "Applying vendor graphics patch: $filename"
+    patchelf --replace-needed libEGL.so libbrcmEGL.so \
+             --replace-needed libGLES_CM.so libbrcmGLESv2.so \
+             --replace-needed libGLESv1_CM.so libbrcmGLESv2.so \
+             --replace-needed libGLESv2.so libbrcmGLESv2.so \
+             --replace-needed libOpenVG.so libbrcmOpenVG.so \
+             --replace-needed libWFC.so libbrcmWFC.so "$filename"
+}

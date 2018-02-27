@@ -12,7 +12,7 @@
 rp_module_id="splashscreen"
 rp_module_desc="Configure Splashscreen"
 rp_module_section="main"
-rp_module_flags="noinstclean !x86 !osmc !xbian  !kms"
+rp_module_flags="noinstclean !x86 !osmc !xbian  "
 
 function _update_hook_splashscreen() {
     # make sure splashscreen is always up to date if updating just RetroPie-Setup
@@ -293,7 +293,7 @@ function gui_splashscreen() {
                         disable_splashscreen
                         printMsgs "dialog" "Disabled splashscreen on boot."
                     else
-                        [[ ! -f /etc/splashscreen.list ]] && rp_CallModule splashscreen default
+                        [[ ! -f /etc/splashscreen.list ]] && rp_callModule splashscreen default
                         enable_splashscreen
                         printMsgs "dialog" "Enabled splashscreen on boot."
                     fi
