@@ -1,0 +1,132 @@
+; InputAutoCfg.ini for Mupen64Plus SDL Input plugin
+
+; Keyboard_START
+[Keyboard]
+plugged = True
+plugin = 2
+mouse = False
+DPad R = key(100)
+DPad L = key(97)
+DPad D = key(115)
+DPad U = key(119)
+Start = key(13)
+Z Trig = key(122)
+B Button = key(306)
+A Button = key(304)
+C Button R = key(108)
+C Button L = key(106)
+C Button D = key(107)
+C Button U = key(105)
+R Trig = key(99)
+L Trig = key(120)
+Mempak switch = key(44)
+Rumblepak switch = key(46)
+X Axis = key(276,275)
+Y Axis = key(273,274)
+; Keyboard_END
+
+
+
+; Wireless Controller_START 
+[Wireless Controller]
+plugged = True
+plugin = 2
+mouse = False
+AnalogDeadzone = 4096,4096
+AnalogPeak = 32768,32768
+Mempak switch = button(10) 
+Rumblepak switch = button(11) 
+C Button D = button(2) axis(5+) 
+C Button L = axis(2-) 
+L Trig = button(4) 
+Start = button(9) 
+Y Axis = axis(1-,1+)
+DPad U = hat(0 Up) 
+C Button U = button(3) axis(5-) 
+A Button = button(1) 
+DPad D = hat(0 Down) 
+X Axis = axis(0-,0+)
+R Trig = button(5) 
+DPad R = hat(0 Right) 
+B Button = button(0) 
+DPad L = hat(0 Left) 
+C Button R = axis(2+) 
+Z Trig = button(6) 
+; Wireless Controller_END 
+
+
+
+; Brook P4 Wired Gamepad V1.6_START 
+[Brook P4 Wired Gamepad V1.6]
+plugged = True
+plugin = 2
+mouse = False
+AnalogDeadzone = 4096,4096
+AnalogPeak = 32768,32768
+Mempak switch = 
+Rumblepak switch = 
+L Trig = button(5) 
+Start = button(9) 
+C Button D = button(1) 
+A Button = button(2) 
+R Trig = button(4) 
+C Button U = button(0) 
+B Button = button(3) 
+Z Trig = button(7) 
+X Axis = hat(0 Left, 0 Right) 
+Y Axis = hat(0 Up, 0 Down) 
+; Brook P4 Wired Gamepad V1.6_END 
+
+; Pro Controller_START 
+[Pro Controller]
+plugged = True
+plugin = 2
+mouse = False
+AnalogDeadzone = 4096,4096
+AnalogPeak = 32768,32768
+Mempak switch = button(10) 
+Rumblepak switch = button(11) 
+C Button D = button(1) axis(3+) 
+C Button L = axis(2-) 
+L Trig = button(4) 
+Start = button(9) 
+Y Axis = axis(1-,1+)
+DPad U = hat(0 Up) 
+C Button U = button(3) axis(3-) 
+A Button = button(0) 
+DPad D = hat(0 Down) 
+X Axis = axis(0-,0+)
+R Trig = button(5) 
+DPad R = hat(0 Right) 
+B Button = button(2) 
+DPad L = hat(0 Left) 
+C Button R = axis(2+) 
+Z Trig = button(6) 
+; Pro Controller_END 
+
+; Generic X-Box pad_START 
+[Generic X-Box pad]
+plugged = True
+plugin = 2
+mouse = False
+AnalogDeadzone = 4096,4096
+AnalogPeak = 32768,32768
+Mempak switch = button(9) 
+Rumblepak switch = button(10) 
+C Button D = button(0) axis(4+) 
+C Button L = axis(0-) 
+L Trig = axis(2-) 
+Start = button(7) 
+Y Axis = axis(1-,1+)
+DPad U = hat(0 Up) 
+C Button U = button(2) axis(4-) 
+A Button = button(1) 
+DPad D = hat(0 Down) 
+X Axis = axis(3-,3+)
+DPad R = hat(0 Right) 
+B Button = button(3) 
+DPad L = hat(0 Left) 
+C Button R = axis(0+) 
+Z Trig = button(4) 
+; Generic X-Box pad_END 
+

@@ -1,0 +1,78 @@
+/home/pigaming/RetroPie/roms/n64/Cruis'n USA (U) (V1.2) [!].z64
+
+/opt/retropie/libretrocores/lr-parallel-n64/parallel_n64_libretro.so
+ParaLLEl N64
+
+
+/home/pigaming/RetroPie/roms/n64/Mario Kart 64 (USA).n64
+
+/opt/retropie/libretrocores/lr-parallel-n64/parallel_n64_libretro.so
+ParaLLEl N64
+
+
+/home/pigaming/RetroPie/roms/n64/Mario Kart 64 (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Conker's Bad Fur Day (USA).n64
+
+/opt/retropie/libretrocores/lr-parallel-n64/parallel_n64_libretro.so
+ParaLLEl N64
+
+
+/home/pigaming/RetroPie/roms/n64/Conker's Bad Fur Day (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Cruis'n Exotica (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/F-Zero X (USA).n64
+
+/opt/retropie/libretrocores/lr-parallel-n64/parallel_n64_libretro.so
+ParaLLEl N64
+
+
+/home/pigaming/RetroPie/roms/n64/007 - GoldenEye (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Cruis'n World (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/F-Zero X (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Killer Instinct Gold (USA) (Rev B).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Cruis'n USA (USA) (Rev B).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+
+/home/pigaming/RetroPie/roms/n64/Tetrisphere (USA).n64
+
+/opt/retropie/libretrocores/lr-mupen64plus/mupen64plus_libretro.so
+Mupen64Plus GLES2
+
+

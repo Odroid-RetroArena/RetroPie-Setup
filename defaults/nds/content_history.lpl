@@ -1,0 +1,60 @@
+/home/pigaming/RetroPie/roms/mame-libretro/yard.zip
+
+/opt/retropie/libretrocores/lr-mame2003/mame2003_libretro.so
+MAME 2003
+
+
+/home/pigaming/RetroPie/roms/intellivision/Snafu.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/intellivision/Pac-Man.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/intellivision/Defender.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/intellivision/Centipede.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/intellivision/B-17 Bomber.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/intellivision/Astrosmash.int
+
+/opt/retropie/libretrocores/lr-freeintv/freeintv_libretro.so
+FreeIntv
+
+
+/home/pigaming/RetroPie/roms/nds/Lego Star Wars The Complete Saga .nds
+
+/opt/retropie/libretrocores/lr-desmume/desmume_libretro.so
+DeSmuME
+
+
+/home/pigaming/RetroPie/roms/nds/Castlevania - Dawn of Sorrow .nds
+
+/opt/retropie/libretrocores/lr-desmume/desmume_libretro.so
+DeSmuME
+
+
+/home/pigaming/RetroPie/roms/nds/1 vs 100 (USA).zip
+
+/opt/retropie/libretrocores/lr-desmume/desmume_libretro.so
+DeSmuME
+
+
