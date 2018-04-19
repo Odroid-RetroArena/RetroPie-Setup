@@ -37,9 +37,7 @@ function install_lr-mame2003() {
     md_ret_files=(
         "$(_get_name_lr-mame2003)_libretro.so"
         'README.md'
-        'changed.txt'
-        'whatsnew.txt'
-        'whatsold.txt'
+        'CHANGELOG.md'
         'metadata'
     )
 }
