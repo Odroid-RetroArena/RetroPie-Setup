@@ -16,7 +16,7 @@ rp_module_section=""
 rp_module_flags=""
 
 function get_ver_sdl2() {
-    echo "2.0.7"
+    echo "2.0.8"
 }
 
 function get_pkg_ver_sdl2() {
@@ -79,8 +79,8 @@ function install_sdl2() {
 }
 
 function install_bin_sdl2() {
-    if ! isPlatform "rpi"; then
-        md_ret_errors+=("$md_id is only available as a binary package for platform rpi")
+    if ! isPlatform "mali"; then
+        md_ret_errors+=("$md_id is only available as a binary package for platform mali")
         return 1
     fi
     wget -c "$__binary_url/libsdl2-dev_$(get_pkg_ver_sdl2)_armhf.deb"
