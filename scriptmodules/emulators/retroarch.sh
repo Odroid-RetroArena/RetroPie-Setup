@@ -48,9 +48,9 @@ function build_retroarch() {
     if compareVersions "$__os_debian_ver" lt 9; then
         params+=(--disable-ffmpeg)
     fi
-    isPlatform "gles" && params+=(--enable-opengles)
+    isPlatform "gles" && params+=(--enable-opengles --enable-opengles3)
     isPlatform "rpi" && params+=(--enable-dispmanx)
-    isPlatform "mali" && params+=(--enable-mali_fbdev)
+    isPlatform "mali" && params+=(--enable-mali_fbdev --enable-pulse)
     isPlatform "kms" && params+=(--enable-kms)
     isPlatform "arm" && params+=(--enable-floathard)
     isPlatform "neon" && params+=(--enable-neon)
@@ -100,6 +100,14 @@ function install_xmb_monochrome_assets_retroarch() {
     [[ ! -d "$dir" ]] && mkUserDir "$dir"
     downloadAndExtract "$__archive_url/retroarch-xmb-monochrome.tar.gz" "$dir"
     chown -R $user:$user "$dir"
+}
+
+function _package_xmb_monochrome_assets_retroarch() {
+    gitPullOrClone "$md_build/assets" https://github.com/libretro/retroarch-assets.git
+    mkdir -p "$__tmpdir/archives"
+    local archive="$__tmpdir/archives/retroarch-xmb-monochrome.tar.gz"
+    rm -f "$archive"
+    tar cvzf "$archive" -C "$md_build/assets" xmb/monochrome
 }
 
 function configure_retroarch() {
