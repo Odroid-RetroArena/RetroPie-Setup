@@ -105,7 +105,7 @@ function build_mupen64plus() {
         'mupen64plus-audio-sdl/projects/unix/mupen64plus-audio-sdl.so'
         'mupen64plus-input-sdl/projects/unix/mupen64plus-input-sdl.so'
         'mupen64plus-rsp-hle/projects/unix/mupen64plus-rsp-hle.so'
-        'GLideN64/projects/cmake/plugin/Release/mupen64plus-video-GLideN64.so'
+        'GLideN64/projects/cmake/plugin/release/mupen64plus-video-GLideN64.so'
     )
     if isPlatform "mali"; then
         md_ret_require+=(
