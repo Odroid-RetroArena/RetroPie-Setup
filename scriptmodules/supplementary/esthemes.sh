@@ -64,7 +64,6 @@ function gui_esthemes() {
         'AmadhiX eudora'
         'AmadhiX eudora-bigshot'
         'AmadhiX eudora-concise'
-        'ChoccyHobNob eudora-updated'
         'InsecureSpike retroplay-clean-canela'
         'InsecureSpike retroplay-clean-detail-canela'
         'Omnija simpler-turtlepi'
@@ -133,7 +132,12 @@ function gui_esthemes() {
         'RetroHursty69 primo_light'
         'RetroHursty69 back2basics'
         'RetroHursty69 retrogamenews'
-        'RetroHursty69 bluray'        
+        'RetroHursty69 bluray'
+        'RetroHursty69 soda'
+        'RetroHursty69 lightswitch'
+        'RetroHursty69 darkswitch'
+        'RetroHursty69 whiteslide'
+        'RetroHursty69 graffiti'
         'Saracade scv720'
         'chicueloarcade Chicuelo'
         'SuperMagicom nostalgic'
@@ -196,7 +200,7 @@ function gui_esthemes() {
                             fi
                             ;;
                         2)
-                            gitPullOrClone "$gallerydir" "http://github.com/wetriner/es-theme-gallery"
+                            gitPullOrClone "$gallerydir" "https://github.com/wetriner/es-theme-gallery"
                             ;;
                         3)
                             if [[ -d "$gallerydir" ]]; then
