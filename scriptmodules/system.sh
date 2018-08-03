@@ -35,7 +35,7 @@ function setup_env() {
     fi
 
     # set location of binary downloads
-    __binary_host="files.retropie.org.uk"
+    __binary_host="odroidarena.com/pub/binaries"
     [[ "$__has_binaries" -eq 1 ]] && __binary_url="https://$__binary_host/binaries/$__os_codename/$__platform"
 
     __archive_url="https://files.retropie.org.uk/archives"
@@ -90,11 +90,11 @@ function get_os_version() {
                 __platform_flags+=" xbian"
             fi
 
-            # we provide binaries for RPI on Raspbian < 10 only
-            if isPlatform "rpi" && compareVersions "$__os_release" lt 10; then
+            # We currently only provide binaries for the Odroid XU4
+            if isPlatform "odroid-xu" && compareVersions "$__os_release" lt 9; then
                 __has_binaries=1
             fi
-
+            
             # get major version (8 instead of 8.0 etc)
             __os_debian_ver="${__os_release%%.*}"
             ;;
@@ -241,11 +241,15 @@ function get_platform() {
                 __platform="vero4k"
                 ;;
             *)
-                case $architecture in
-                    i686|x86_64|amd64)
-                        __platform="x86"
-                        ;;
-                esac
+                if grep -q "Rock64" /sys/firmware/devicetree/base/model 2>/dev/null; then
+                    __platform="rock64"
+                else
+                    case $architecture in
+                        i686|x86_64|amd64)
+                            __platform="x86"
+                            ;;
+                    esac
+                fi
                 ;;
         esac
     fi
@@ -308,12 +312,28 @@ function platform_odroid-c2() {
 }
 
 function platform_odroid-xu() {
-    __default_cflags="-O2 -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
+    __default_cflags="-O2  -mcpu=cortex-a15 -mtune=cortex-a15.cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     # required for mali-fbdev headers to define GL functions
     __default_cflags+=" -DGL_GLEXT_PROTOTYPES"
     __default_asflags=""
     __default_makeflags="-j2"
     __platform_flags="arm armv7 neon mali gles"
+    __has_binaries=1
+}
+
+function platform_rock64() {
+    if [[ "$(getconf LONG_BIT)" -eq 32 ]]; then
+        __default_cflags="-O2 -march=armv8-a+crc -mtune=cortex-a53 -mfpu=neon-fp-armv8"
+        __platform_flags="arm armv8 neon kms gles"
+    else
+        __default_cflags="-O2 -march=native"
+        __platform_flags="aarch64 kms gles"
+    fi
+    __default_cflags+=" -ftree-vectorize -funsafe-math-optimizations"
+    # required for mali headers to define GL functions
+    __default_cflags+=" -DGL_GLEXT_PROTOTYPES"
+    __default_asflags=""
+    __default_makeflags="-j2"
 }
 
 function platform_tinker() {
