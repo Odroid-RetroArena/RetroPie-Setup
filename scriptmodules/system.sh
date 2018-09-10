@@ -20,7 +20,7 @@ function setup_env() {
     __memory_phys=$(free -m | awk '/^Mem:/{print $2}')
     __memory_total=$(free -m -t | awk '/^Total:/{print $2}')
 
-    __has_binaries=1
+    __has_binaries=0
 
     get_platform
     get_os_version
@@ -35,7 +35,7 @@ function setup_env() {
     fi
 
     # set location of binary downloads
-    __binary_host="odroidarena.com/pub"
+    __binary_host="odroidarena.com/pub/binaries"
     [[ "$__has_binaries" -eq 1 ]] && __binary_url="https://$__binary_host/binaries/$__os_codename/$__platform"
 
     __archive_url="https://files.retropie.org.uk/archives"
@@ -76,10 +76,6 @@ function get_os_version() {
     local error=""
     case "$__os_id" in
         Raspbian|Debian)
-            if compareVersions "$__os_release" ge 9 && isPlatform "rpi"; then
-                error="Sorry - Raspbian/Debian Stretch (and newer) is not yet supported on the RPI"
-            fi
-
             if compareVersions "$__os_release" lt 8; then
                 error="You need Raspbian/Debian Jessie or newer"
             fi
@@ -98,7 +94,7 @@ function get_os_version() {
             if isPlatform "odroid-xu" && compareVersions "$__os_release" lt 9; then
                 __has_binaries=1
             fi
-
+            
             # get major version (8 instead of 8.0 etc)
             __os_debian_ver="${__os_release%%.*}"
             ;;
@@ -111,14 +107,20 @@ function get_os_version() {
             esac
             ;;
         LinuxMint)
-            if compareVersions "$__os_release" lt 17; then
-                error="You need Linux Mint 17 or newer"
-            elif compareVersions "$__os_release" lt 18; then
-                __os_ubuntu_ver="14.04"
-            else
-                __os_ubuntu_ver="16.04"
+            if [[ "$__os_desc" != LMDE* ]]; then
+                if compareVersions "$__os_release" lt 17; then
+                    error="You need Linux Mint 17 or newer"
+                elif compareVersions "$__os_release" lt 18; then
+                    __os_ubuntu_ver="14.04"
+                    __os_debian_ver="8"
+                elif compareVersions "$__os_release" lt 19; then
+                    __os_ubuntu_ver="16.04"
+                    __os_debian_ver="8"
+                else
+                    __os_ubuntu_ver="18.04"
+                    __os_debian_ver="9"
+                fi
             fi
-            __os_debian_ver="8"
             ;;
         Ubuntu)
             if compareVersions "$__os_release" lt 14.04; then
@@ -129,6 +131,12 @@ function get_os_version() {
                 __os_debian_ver="9"
             fi
             __os_ubuntu_ver="$__os_release"
+            ;;
+        Deepin)
+            if compareVersions "$__os_release" lt 15.5; then
+                error="You need Deepin OS 15.5 or newer"
+            fi
+            __os_debian_ver="9"
             ;;
         elementary)
             if compareVersions "$__os_release" lt 0.3; then
@@ -229,12 +237,19 @@ function get_platform() {
             "Rockchip (Device Tree)")
                 __platform="tinker"
                 ;;
+            Vero4K)
+                __platform="vero4k"
+                ;;
             *)
-                case $architecture in
-                    i686|x86_64|amd64)
-                        __platform="x86"
-                        ;;
-                esac
+                if grep -q "Rock64" /sys/firmware/devicetree/base/model 2>/dev/null; then
+                    __platform="rock64"
+                else
+                    case $architecture in
+                        i686|x86_64|amd64)
+                            __platform="x86"
+                            ;;
+                    esac
+                fi
                 ;;
         esac
     fi
@@ -242,14 +257,12 @@ function get_platform() {
     if ! fnExists "platform_${__platform}"; then
         fatalError "Unknown platform - please manually set the __platform variable to one of the following: $(compgen -A function platform_ | cut -b10- | paste -s -d' ')"
     fi
-
     platform_${__platform}
     [[ -z "$__default_cxxflags" ]] && __default_cxxflags="$__default_cflags"
 }
-
 function platform_rpi1() {
     # values to be used for configure/make
-    __default_cflags="-O2 -mfpu=vfp -march=armv6j -mfloat-abi=hard"
+    __default_cflags="-O2 -mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard"
     __default_asflags=""
     __default_makeflags=""
     __platform_flags="arm armv6 rpi gles"
@@ -257,7 +270,6 @@ function platform_rpi1() {
     # make chroot identify as arm6l
     __qemu_cpu=arm1176
 }
-
 function platform_rpi2() {
     __default_cflags="-O2 -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     __default_asflags=""
@@ -265,7 +277,6 @@ function platform_rpi2() {
     __platform_flags="arm armv7 neon rpi gles"
     __qemu_cpu=cortex-a7
 }
-
 # note the rpi3 currently uses the rpi2 binaries - for ease of maintenance - rebuilding from source
 # could improve performance with the compiler options below but needs further testing
 function platform_rpi3() {
@@ -274,7 +285,6 @@ function platform_rpi3() {
     __default_makeflags="-j2"
     __platform_flags="arm armv8 neon rpi gles"
 }
-
 function platform_odroid-c1() {
     __default_cflags="-O2 -mcpu=cortex-a5 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     __default_asflags=""
@@ -282,7 +292,6 @@ function platform_odroid-c1() {
     __platform_flags="arm armv7 neon mali gles"
     __qemu_cpu=cortex-a9
 }
-
 function platform_odroid-c2() {
     if [[ "$(getconf LONG_BIT)" -eq 32 ]]; then
         __default_cflags="-O2 -march=armv8-a+crc -mtune=cortex-a53 -mfpu=neon-fp-armv8"
@@ -295,17 +304,29 @@ function platform_odroid-c2() {
     __default_asflags=""
     __default_makeflags="-j2"
 }
-
 function platform_odroid-xu() {
-    __default_cflags="-O2 -mcpu=cortex-a15 -mtune=cortex-a15.cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
+    __default_cflags="-O2  -mcpu=cortex-a15 -mtune=cortex-a15.cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     # required for mali-fbdev headers to define GL functions
     __default_cflags+=" -DGL_GLEXT_PROTOTYPES"
     __default_asflags=""
     __default_makeflags="-j2"
     __platform_flags="arm armv7 neon mali gles"
-	__has_binaries=1
+    __has_binaries=1
 }
-
+function platform_rock64() {
+    if [[ "$(getconf LONG_BIT)" -eq 32 ]]; then
+        __default_cflags="-O2 -march=armv8-a+crc -mtune=cortex-a53 -mfpu=neon-fp-armv8"
+        __platform_flags="arm armv8 neon kms gles"
+    else
+        __default_cflags="-O2 -march=native"
+        __platform_flags="aarch64 kms gles"
+    fi
+    __default_cflags+=" -ftree-vectorize -funsafe-math-optimizations"
+    # required for mali headers to define GL functions
+    __default_cflags+=" -DGL_GLEXT_PROTOTYPES"
+    __default_asflags=""
+    __default_makeflags="-j2"
+}
 function platform_tinker() {
     __default_cflags="-O2 -marm -march=armv7-a -mtune=cortex-a17 -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     # required for mali headers to define GL functions
@@ -314,31 +335,34 @@ function platform_tinker() {
     __default_makeflags="-j2"
     __platform_flags="arm armv7 neon kms gles"
 }
-
 function platform_x86() {
     __default_cflags="-O2 -march=native"
     __default_asflags=""
     __default_makeflags="-j$(nproc)"
     __platform_flags="x11 gl"
 }
-
 function platform_generic-x11() {
     __default_cflags="-O2"
     __default_asflags=""
     __default_makeflags="-j$(nproc)"
     __platform_flags="x11 gl"
 }
-
 function platform_armv7-mali() {
     __default_cflags="-O2 -march=armv7-a -mfpu=neon-vfpv4 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     __default_asflags=""
     __default_makeflags="-j$(nproc)"
     __platform_flags="arm armv7 neon mali gles"
 }
-
 function platform_imx6() {
     __default_cflags="-O2 -march=armv7-a -mfpu=neon -mtune=cortex-a9 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
     __default_asflags=""
     __default_makeflags="-j2"
     __platform_flags="arm armv7 neon"
 }
+function platform_vero4k() {
+    __default_cflags="-I/opt/vero3/include -L/opt/vero3/lib -O2 -march=armv8-a+crc -mtune=cortex-a53 -mfpu=neon-fp-armv8 -mfloat-abi=hard -ftree-vectorize -funsafe-math-optimizations"
+    __default_asflags=""
+    __default_makeflags="-j4"
+    __platform_flags="arm armv8 neon vero4k gles"
+}
+
